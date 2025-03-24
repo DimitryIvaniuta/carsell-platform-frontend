@@ -1,12 +1,12 @@
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // Angular Material modules
-import { MatToolbarModule } from '@angular/material/toolbnpm installar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -38,7 +38,6 @@ import { JwtInterceptor } from './shared/jwt-interceptor';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatToolbarModule,
@@ -49,6 +48,7 @@ import { JwtInterceptor } from './shared/jwt-interceptor';
     MatDialogModule
   ],
   providers: [
+    provideHttpClient(withFetch()),
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

@@ -1,12 +1,22 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { AuthService } from './shared/auth.service';
+import { MatToolbar } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  imports: [
+    MatToolbar,
+    RouterOutlet
+  ],
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'carsell-frontend';
+  constructor(private authService: AuthService, private router: Router) { }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }
