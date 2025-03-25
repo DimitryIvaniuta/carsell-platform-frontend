@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class CarService {
   private apiUrl = '/api/cars';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getCars(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);

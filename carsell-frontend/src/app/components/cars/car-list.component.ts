@@ -1,10 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { CarService } from '../../shared/car.service';
-import { MatDialog } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { CarService } from '../../services/car.service';
 import { CarDialogComponent } from './car-dialog.component';
 
 @Component({
   selector: 'app-car-list',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
   templateUrl: './car-list.component.html',
   styleUrls: ['./car-list.component.css']
 })
@@ -12,29 +26,29 @@ export class CarListComponent implements OnInit {
   cars: any[] = [];
   displayedColumns: string[] = ['id', 'make', 'model', 'year', 'price', 'actions'];
 
-  constructor(private carService: CarService, public dialog: MatDialog) { }
+  constructor(private carService: CarService, public dialog: MatDialog) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadCars();
   }
 
-  loadCars() {
+  loadCars(): void {
     this.carService.getCars().subscribe({
-      next: (data: any[]) => this.cars = data,
-      error: err => console.error(err)
+      next: (data) => this.cars = data,
+      error: (err) => console.error(err)
     });
   }
 
-  deleteCar(id: number) {
+  deleteCar(id: number): void {
     if (confirm('Are you sure you want to delete this car?')) {
       this.carService.deleteCar(id).subscribe({
         next: () => this.loadCars(),
-        error: err => console.error(err)
+        error: (err) => console.error(err)
       });
     }
   }
 
-  openCarDialog(car?: any) {
+  openCarDialog(car?: any): void {
     const dialogRef = this.dialog.open(CarDialogComponent, {
       width: '400px',
       data: car ? { ...car } : {}
@@ -43,16 +57,14 @@ export class CarListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (result.id) {
-          // Update existing car
           this.carService.updateCar(result.id, result).subscribe({
             next: () => this.loadCars(),
-            error: err => console.error(err)
+            error: (err) => console.error(err)
           });
         } else {
-          // Create new car
           this.carService.createCar(result).subscribe({
             next: () => this.loadCars(),
-            error: err => console.error(err)
+            error: (err) => console.error(err)
           });
         }
       }

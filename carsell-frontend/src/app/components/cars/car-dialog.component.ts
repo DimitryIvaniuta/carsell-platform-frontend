@@ -1,18 +1,32 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-car-dialog',
-  templateUrl: './car-dialog.component.html'
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
+  templateUrl: './car-dialog.component.html',
+  styleUrls: ['./car-dialog.component.css']
 })
 export class CarDialogComponent {
   carForm: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     public dialogRef: MatDialogRef<CarDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.carForm = this.fb.group({
       id: [data.id],
@@ -23,15 +37,15 @@ export class CarDialogComponent {
       price: [data.price, [Validators.required, Validators.min(0)]],
       sellerId: [data.sellerId],
       description: [data.description],
-      trunkCapacity: [data.trunkCapacity]  // Optional field for SEDAN
+      trunkCapacity: [data.trunkCapacity]
     });
   }
 
-  onNoClick(): void {
+  onCancel(): void {
     this.dialogRef.close();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.carForm.valid) {
       this.dialogRef.close(this.carForm.value);
     }

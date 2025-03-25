@@ -3,23 +3,23 @@
   <form [formGroup]="carForm">
     <mat-form-field appearance="fill">
       <mat-label>Type</mat-label>
-      <input matInput formControlName="@type" />
+      <input matInput formControlName="@type">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Make</mat-label>
-      <input matInput formControlName="make" />
+      <input matInput formControlName="make">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Model</mat-label>
-      <input matInput formControlName="model" />
+      <input matInput formControlName="model">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Year</mat-label>
-      <input matInput type="number" formControlName="year" />
+      <input matInput type="number" formControlName="year">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Price</mat-label>
-      <input matInput type="number" formControlName="price" />
+      <input matInput type="number" formControlName="price">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Description</mat-label>
@@ -27,11 +27,11 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Trunk Capacity</mat-label>
-      <input matInput type="number" formControlName="trunkCapacity" />
+      <input matInput type="number" formControlName="trunkCapacity">
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button (click)="onSubmit()" [disabled]="!carForm.valid">Save</button>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onSubmit()" [disabled]="!carForm.valid">Save</button>
 </div>

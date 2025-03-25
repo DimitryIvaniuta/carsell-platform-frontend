@@ -1,9 +1,13 @@
-
-<mat-toolbar color="primary">
-  <span>CarSell Platform</span>
-  <span class="spacer"></span>
-  <a mat-button routerLink="/cars">Cars</a>
-  <a mat-button routerLink="/profile">Profile</a>
-  <button mat-button (click)="logout()">Logout</button>
-</mat-toolbar>
-<router-outlet></router-outlet>
+<ng-container *ngIf="authService.getToken(); else loginTemplate">
+  <mat-toolbar color="primary">
+    <span>CarSell Platform</span>
+    <span class="spacer"></span>
+    <a mat-button routerLink="/cars">Cars</a>
+    <a mat-button routerLink="/profile">Profile</a>
+    <button mat-button (click)="logout()">Logout</button>
+  </mat-toolbar>
+  <router-outlet></router-outlet>
+</ng-container>
+<ng-template #loginTemplate>
+  <router-outlet></router-outlet>
+</ng-template>
