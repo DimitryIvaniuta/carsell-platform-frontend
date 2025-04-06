@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { CarService } from '../../services/car.service';
 import { CarDialogComponent } from './car-dialog.component';
+import { CarAddRequest, CarRequest, CarUpdateRequest } from '../../models/cars/car-request.model';
+import { CarResponse } from '../../models/cars/car-response.model';
 
 @Component({
   selector: 'app-car-list',
@@ -25,7 +27,16 @@ import { CarDialogComponent } from './car-dialog.component';
 export class CarListComponent implements OnInit {
   cars: any[] = [];
   displayedColumns: string[] = ['id', 'make', 'model', 'year', 'price', 'actions'];
-
+  defaultCar: CarAddRequest = {
+    "@type": "SEDAN",
+    make: 'Toyota',
+    model: 'Camry',
+    year: new Date().getFullYear(),
+    price: 12123,
+    description: 'test',
+    trunkCapacity: 3,
+    sedanCapacity: 5
+  };
   constructor(private carService: CarService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -48,20 +59,24 @@ export class CarListComponent implements OnInit {
     }
   }
 
-  openCarDialog(car?: any): void {
+  openCarDialog(car?: CarResponse | CarRequest): void {
+    // If no car is provided, assume adding a new car.
+    const dialogData: CarRequest = car ? car as CarRequest : this.defaultCar;
     const dialogRef = this.dialog.open(CarDialogComponent, {
       width: '400px',
-      data: car ? { ...car } : {}
+      data: dialogData
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: CarRequest | undefined) => {
       if (result) {
-        if (result.id) {
-          this.carService.updateCar(result.id, result).subscribe({
+        if (this.isUpdateRequest(result)) {
+          // For update, call updateCar using the update type (which includes an id).
+          this.carService.updateCar(result.id, result as CarUpdateRequest).subscribe({
             next: () => this.loadCars(),
             error: (err) => console.error(err)
           });
         } else {
+          // For new car, call createCar.
           this.carService.createCar(result).subscribe({
             next: () => this.loadCars(),
             error: (err) => console.error(err)
@@ -70,4 +85,13 @@ export class CarListComponent implements OnInit {
       }
     });
   }
+
+
+  /**
+   * Type guard to check if the car request is an update request.
+   */
+  private isUpdateRequest(car: CarRequest): car is CarUpdateRequest {
+    return (car as CarUpdateRequest).id !== undefined;
+  }
+
 }

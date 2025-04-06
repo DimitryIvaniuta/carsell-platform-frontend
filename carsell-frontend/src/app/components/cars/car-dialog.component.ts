@@ -5,6 +5,9 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { CarAddRequest } from '../../models/cars/car-request.model';
+import { CarTypeConfigMapping } from '../../models/cars/configuration/car-type.config';
+import { CarExtraFieldConfig } from './car-extra-field.model';
 
 @Component({
   selector: 'app-car-dialog',
@@ -21,24 +24,36 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./car-dialog.component.css']
 })
 export class CarDialogComponent {
-  carForm: FormGroup;
+  carForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<CarDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+    @Inject(MAT_DIALOG_DATA) public data: Partial<CarAddRequest>
+  ) {}
+
+  ngOnInit(): void {
+    // Determine the car type; default to 'SEDAN' if not provided.
+    const carType = this.data['@type'] || 'SEDAN';
+
     this.carForm = this.fb.group({
-      id: [data.id],
-      '@type': [data['@type'] || 'SEDAN', Validators.required],
-      make: [data.make, Validators.required],
-      model: [data.model, Validators.required],
-      year: [data.year, [Validators.required, Validators.min(1900)]],
-      price: [data.price, [Validators.required, Validators.min(0)]],
-      sellerId: [data.sellerId],
-      description: [data.description],
-      trunkCapacity: [data.trunkCapacity]
+      "@type": [carType, Validators.required],
+      make: [this.data.make, Validators.required],
+      model: [this.data.model, Validators.required],
+      year: [this.data.year, [Validators.required, Validators.min(1900)]],
+      price: [this.data.price, [Validators.required, Validators.min(0)]],
+      description: [this.data.description],
     });
+    // Lookup extra control configuration for this car type.
+    const config = CarTypeConfigMapping[carType];
+    if (config && config.extraFields) {
+      config.extraFields.forEach((fieldConfig: CarExtraFieldConfig)=> {
+        this.carForm.addControl(
+          fieldConfig.fieldName,
+          this.fb.control(fieldConfig.extractValue, fieldConfig.validators)
+        );
+      });
+    }
   }
 
   onCancel(): void {
@@ -47,7 +62,7 @@ export class CarDialogComponent {
 
   onSubmit(): void {
     if (this.carForm.valid) {
-      this.dialogRef.close(this.carForm.value);
+      this.dialogRef.close(this.carForm.value as CarAddRequest);
     }
   }
 }
