@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'cars', component: CarListComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/cars' }
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({

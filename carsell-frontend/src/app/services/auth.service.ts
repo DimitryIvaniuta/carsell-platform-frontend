@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { TokenKey } from './application.keys';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private tokenKey = 'jwt_token';
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +19,7 @@ export class AuthService {
         tap(response => {
           const token = response.headers.get('Authorization') || response.body?.token;
           if (token) {
-            localStorage.setItem(this.tokenKey, token);
+            localStorage.setItem(TokenKey, token);
             localStorage.setItem('currentUser', username);
           }
         })
@@ -27,12 +27,12 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(TokenKey);
     localStorage.removeItem('currentUser');
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return localStorage.getItem(TokenKey);
   }
 
   signup(user: any): Observable<any> {
