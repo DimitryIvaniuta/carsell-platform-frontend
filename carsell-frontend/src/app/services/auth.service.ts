@@ -36,6 +36,6 @@ export class AuthService {
   }
 
   signup(user: any): Observable<any> {
-    return this.http.post('/api/users', user);
+    return this.http.post('/api/users/signup', user);
   }
 }
