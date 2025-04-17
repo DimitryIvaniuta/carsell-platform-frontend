@@ -24,7 +24,8 @@ import { CarListComponent } from './components/cars/car-list.component';
 import { CarDialogComponent } from './components/cars/car-dialog.component';
 
 // Services & Interceptors
-import { JwtInterceptor } from './shared/jwt-interceptor';
+import { JwtInterceptor } from './services/jwt-interceptor';
+import {ErrorInterceptor} from './interceptors/error.interceptor';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { JwtInterceptor } from './shared/jwt-interceptor';
   ],
   providers: [
     provideHttpClient(withFetch()),
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

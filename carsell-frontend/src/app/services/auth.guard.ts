@@ -14,11 +14,15 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     // Check for an active session (e.g., a stored JWT token)
-    if (this.authService.getToken()) {
+    console.log('token auth: '+this.authService.getToken())
+    // if (this.authService.getToken()) {
+    if (this.authService.isLoggedIn()) {
       return true;
     } else {
-      // Redirect to login if no active session is found
-      return this.router.createUrlTree(['/login']);
+      // Redirect to login page if no active session is found
+      return this.router.createUrlTree(['/login'], {
+        queryParams: { returnUrl: state.url }
+      });
     }
   }
 }
