@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
@@ -14,13 +14,12 @@ import { CarResponse } from '../../models/cars/car-response.model';
   selector: 'app-car-list',
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     MatToolbarModule,
     MatTableModule,
     MatButtonModule,
     MatDialogModule
-  ],
+],
   templateUrl: './car-list.component.html',
   styleUrls: ['./car-list.component.css']
 })

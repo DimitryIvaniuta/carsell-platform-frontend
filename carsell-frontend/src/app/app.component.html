@@ -1,4 +1,4 @@
-<ng-container *ngIf="authService.getToken(); else loginTemplate">
+@if (authService.getToken()) {
   <mat-toolbar color="primary">
     <span>CarSell Platform</span>
     <span class="spacer"></span>
@@ -7,7 +7,6 @@
     <button mat-button (click)="logout()">Logout</button>
   </mat-toolbar>
   <router-outlet></router-outlet>
-</ng-container>
-<ng-template #loginTemplate>
+} @else {
   <router-outlet></router-outlet>
-</ng-template>
+}

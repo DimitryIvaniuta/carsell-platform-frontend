@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,12 +9,10 @@ import { AuthService } from './services/auth.service';
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule,
-    NgIf,
     RouterModule,
     MatToolbarModule,
     MatButtonModule
-  ],
+],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
