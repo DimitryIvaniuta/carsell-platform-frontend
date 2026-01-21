@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { importProvidersFrom } from '@angular/core';
+import { importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient, withXsrfConfiguration, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
@@ -11,7 +11,7 @@ import { routes } from './app/app.routes';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(BrowserAnimationsModule),
+    provideZoneChangeDetection(),importProvidersFrom(BrowserAnimationsModule),
     provideRouter(routes),
     provideHttpClient(
       // 1) XSRF configuration
